@@ -1,9 +1,306 @@
 
 Video 451: Module Introduction
-
+    What & Why?
+    Summay of the Core Concepts
+        Components, Props, State, React Hooks
+    Full demo project and advanced concepts (Effects, Context)
 
 Video 452: What is React?
 
 
 
+
+Video 456: Creating a React project
+
+    to create a new react project (npx create-react-app react-course)
+        pre-requisite is : node.js
+
+    to run a react project: (npm start)
+
+Video 457: Setting up A Code Editor
+    Extensions which are needed
+        prettier
+            to use prettier got to settings and search for "format" and set the Default Formatter to "esbenp.pretier-vscode"
+
+
+Video 458: React 18
+    the course was described in React 17 where in React 18 there would be a difference in index.js
+
+    React 17 Code  
+        index.js
+            import React from 'react';
+            import ReactDOM from 'react-dom';
+            
+            import './index.css';
+            import App from './App';
+            
+            ReactDOM.render(<App />, document.getElementById('root'));
+    React 18 Code
+        index.js
+            import React from 'react';
+            import ReactDOM from 'react-dom/client';
+            
+            import './index.css';
+            import App from './App';
+            
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(<App />);
+
+
+Video 460: How React Works & Understanding Components
+
+index.js -- will be the starting point of the application; the code here will be the first code to run on the browser when the application loads up.
+            when you render html code like 
+                const root = ReactDOM.createRoot(document.getElementById('root'));
+                root.render(
+                    <App />
+                );
+            the html code which you are rendering <App /> will work during the build step and this such html code inserted are called as 'jsx (in simple terms html in js code)'
+
+            now this App element is rendered to the element on 'public/index.html' file root element where all of our code is been rendered.
+
+Video 461: More Component Work & Styling with CSS classes
+
+    updated the App.js file with this html code 
+        function App() {
+        return (
+            <div>
+            <h1>My Todos</h1>
+            <div className='card'>
+                <h2>TITLE</h2>
+                <div className='actions'>
+                <button className='btn'>OK</button>
+                <button className="btn">CANCEL</button>
+                </div>
+            </div>
+            </div>
+        );
+        }
+    Takeaways: you wont be able to use the class attribute of html since class is not a valid attribute in jsx. instead we need to use the className which is the way we would append class to html from js
+
+Video 462: Building & Re-Using Another Component
+    Creating a new component Todo component -> simply add a new file Todo.js in src/components folder
+        Note: The name of the component (aka function name should start with capital letter)
+
+        Todo.js
+            import './todo.css';
+
+            function Todo() {
+                return (
+                <div className='card'>
+                    <h2>TITLE</h2>
+                    <div className='actions'>
+                    <button className='btn'>OK</button>
+                    <button className="btn">CANCEL</button>
+                    </div>
+                </div>
+                );
+            }
+
+            export default Todo;
+        
+        App.js
+            function App() {
+                return (
+                    <div>
+                    <h1>My Todos</h1>
+                    <Todo></Todo>
+                    <br />
+                    <Todo />
+                    </div>
+                );
+            }
+
+Video 463: Working with props and Dynamic content
+    With the current code every ttitle of the card is defaulted as 'TITLE' here is how we can customize it for each card
+    App.js
+        function App() {
+            return (
+                <div>
+                <h1>My Todos</h1>
+                <Todo title = 'Learn React'></Todo> <!--- Add an attribute like title over here --->
+                <br />
+                <Todo title = 'Master React'/>
+                <Todo title = 'Explore the full React course'/>
+                </div>
+            );
+        }
+    
+    Todo.js
+        function Todo(propsObjectName) { // the title attribute would come here as prop and we use it to access the title
+            return (
+            <div className='card'>
+                <h2>{propsObjectName.title}</h2> <!-- {} - is a way we write an expression and we print out the value from the props object  -->
+                <div className='actions'>
+                <button className='btn'>OK</button>
+                <button className="btn">CANCEL</button>
+                </div>
+            </div>
+            );
+        }
+    
+    Takeaways:  to run expressions in React write your expression inside {}
+
+
+Video 464: Handling Events
+    to execute a function in react upon a button click write something like this  
+        <button className='btn' onClick={okHandler}>OK</button>
+    Note 
+        1. if you write paranthesis after the eventname like below
+            <button className='btn' onClick={okHandler()}>OK</button>
+            React will call the function early wile loading the button on the dom and will be an early call made. and will not call when the button is actually been clicked
+        2. we can even write an arrow function in the onclick like
+            <button onClick={() -> {}}></button>
+
+
+Video 465: Adding More Components
+    Write another two component called as Modal and Backdrop like below
+        Modal.js
+            function Modal(props) {
+                return (
+                    <div className="modal">
+                        <p>Are you sure?</p>
+                        <button className='btn btn--alt'>Cancel</button>
+                        <button className='btn'>Confirm</button>
+                    </div>
+                );
+            }
+            export default Modal;
+        
+        Backdrop.js
+            function Backdrop() {
+                return <div className='backdrop'/>
+            }
+
+            export default Backdrop;
+        
+        App.js
+            function App() {
+                return (
+                    <div>
+                    <h1>My Todos</h1>
+                    <Todo title = 'Learn React'></Todo>
+                    <br />
+                    <Todo title = 'Master React'/>
+                    <Todo title = 'Explore the full React course'/>
+                    <Modal/> {/*  Adding Modal component here  */}
+                    <BackDrop/> {/*  Adding BackDrop component here  */}
+                    </div>
+                );
+            }
+
+Video 466: Introducing State
+    To understand more about the state: https://academind.com/tutorials/what-is-state
+
+
+    to import state in a react project  (import {useState} from 'react')
+    default state in react can only be called in the main function of the component
+    
+    function Todo(propsObjectName) {
+        const [ elementOneVariable, elementTwoVariable ] = useState(false);// these hooks can be only called in direct component function; argument is the starting value
+        //use state will always return array of two elements
+        //firstelement in the array is the current states snapshot --> here the value false is passed so it will take false
+        // secondelement in the array is the function which allows you to change the value (state of the component)
+
+        function okHandler(){
+            elementTwoVariable(true); //updating the calue of the state over here
+        }
+
+        return (
+        <div className='card'>
+            <h2>{propsObjectName.title}</h2>
+            <div className='actions'>
+            <button className='btn' onClick={okHandler}>OK</button>
+            {/* <button className="btn">CANCEL</button> */}
+            </div>
+            { elementOneVariable ? <Modal/>: null } //conditional rendering the component based on the state
+            { /* alternative tot he ternary expression  */ }
+            { /* {elementOneVariable && <Modal/>}  */ }
+            {elementOneVariable && <Backdrop/> } //alternative to ternary yet conditional rendering of the component based of the state
+        </div>
+        );
+    }
+
+Video 467: Working with "Event Props" (Passing Function As Props)
+
+    Epudu ee Modal component lo edina button click cheste em ee modal ni ela cancel cheyali
+
+        Todo.js
+            function Todo(propsObjectName) {
+                const [ elementOneVariable, elementTwoVariable ] = useState(false);
+
+                let actionFromModal = null;
+
+                function okHandler(){
+                    elementTwoVariable(true);
+                }
+
+                function closeHandler() {
+                    elementTwoVariable(false);
+                }
+
+                return (
+                <div className='card'>
+                    <h2>{propsObjectName.title}</h2>
+                    <div className='actions'>
+                        {actionFromModal}
+                    <button className='btn' onClick={okHandler}>OK</button>
+                    </div>
+                    { elementOneVariable ? <Modal ifClickedConfirmed= {closeHandler} ifClickedCancel= {closeHandler}/>: null }
+                    {elementOneVariable && <Backdrop ifClicked = {closeHandler} /> }
+                    {/* ida paina line lo manam ifClicked ani event ni define chestunam and ala chesi closeHandler kilink chestunam */}
+                </div>
+                );
+            }
+        
+        Modal.js
+            function Modal(props) {
+
+                function onClickedConfirmed() {
+                    props.ifClickedConfirmed();
+                    // calling the event defined the parent
+                }
+                
+                function onClickedCancel() {
+                    props.ifClickedCancel();
+                    // calling the event defined the parent
+                }
+
+                return (
+                    <div className="modal">
+                        <p>Are you sure?</p>
+                        <button className='btn btn--alt' onClick={onClickedCancel}>Cancel</button>
+                        {/* connecting to the onClickedCancel call */}
+                        <button className='btn' onClick={onClickedConfirmed}>Confirm</button>
+                    </div>
+                );
+            }
+        
+        Backdrop.js
+            function Backdrop(props) {
+                return <div className='backdrop' onClick={props.ifClicked}/>
+                // directly linking to the event prop
+            }
+
+            export default Backdrop;
+
+Video 468: Use The Right React Router Version
+        In the next lecture, we'll install an extra package that helps us add "Routing".
+
+        You will learn more about it in the next lecture but to follow along smoothly, 
+        make sure you install the correct version (when we install the package in the next lecture) by running:
+
+        npm install --save react-router-dom@5
+
+
+Video 469: Adding Routing
+
+    A fresh app (react-routing-andapplevel-state-mgmt)
+    
+
+Video 470: Adding Links & Navigation
+
+
+
+Video 471: Styling CSS Module
 
