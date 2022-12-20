@@ -296,11 +296,184 @@ Video 468: Use The Right React Router Version
 Video 469: Adding Routing
 
     A fresh app (react-routing-andapplevel-state-mgmt)
-    
+    Add three dummy components within src/pages/AllMeetup.js ; src/pages/Favourites.js; src/pages/NewMeetup.js
+            V5 notes {
+                index.js
+                    import React from 'react';
+                    import ReactDOM from 'react-dom/client';
+                    import './index.css';
+                    import App from './App';
+                    import { BrowserRouter } from 'react-router-dom';
+                    
+                    const root = ReactDOM.createRoot(document.getElementById('root'));
+                    root.render(
+                    <BrowserRouter>
+                    {/* wrap your App component tag within BrowserRouter tag so that it can lay down a base of it as a router*/}
+                        <App />
+                    </BrowserRouter>
+                    );
+
+                app.js 
+                    import { Fragment } from "react";
+                    import { Route, Routes, Link } from "react-router-dom";
+                    import AllMeetup from "./pages/AllMeetups";
+                    import Favourites from "./pages/Favuorites";
+                    import NewMeetup from "./pages/NewMeetup";
+                    
+                    function App() {
+                    return (
+                        <div>
+                            <nav>
+                                <Link to="newmeetup">My Profile</Link>
+                            </nav>
+                            <Switch>
+                                <Route path='/'><AllMeetup/></Route>
+                                <Route path='/new-meetup'><NewMeetup/></Route>
+                                <Route path='/favourites'><Favourites/></Route>
+                            </Switch>
+                        </div>
+                    );
+                    }
+                    export default App;
+            }
+
+            v6 notes: 
+                Key differences between v5 to v6: (https://reacttraining.com/blog/react-router-v6-pre/#introducing-routes, https://github.com/remix-run/react-router/blob/f59ee5488bc343cf3c957b7e0cc395ef5eb572d2/docs/advanced-guides/migrating-5-to-6.md#relative-routes-and-links)
+
+                index.js
+                    import React from 'react';
+                    import ReactDOM from 'react-dom/client';
+                    import './index.css';
+                    import App from './App';
+                    import { BrowserRouter } from 'react-router-dom';
+                    
+                    const root = ReactDOM.createRoot(document.getElementById('root'));
+                    root.render(
+                    <BrowserRouter>
+                        {/* wrap your App component tag within BrowserRouter tag so that it can lay down a base of it as a router*/}
+                            <App />
+                    </BrowserRouter>
+                    );
+                
+                app.js
+                    import { Fragment } from "react";
+                    import { Route, Routes, Link } from "react-router-dom";
+                    import AllMeetup from "./pages/AllMeetups";
+                    import Favourites from "./pages/Favuorites";
+                    import NewMeetup from "./pages/NewMeetup";
+                    
+                    function App() {
+                    return (
+                        <div>
+                        <nav>
+                            <Link to="newmeetup">My Profile</Link>
+                        </nav>
+                        <Routes>
+                            <Route path='/' element= {<AllMeetup/>}/>        
+                            <Route path='favourites' element= {<Favourites/>}/>        
+                            <Route path='newmeetup' element= {<NewMeetup/>}/> 
+                            {/* define your paths this way  */}
+                        </Routes>
+                        </div>
+                    );
+                    }
+                    export default App;
+                
+
 
 Video 470: Adding Links & Navigation
+        create a new component layout/MainNavigation
+            MainNavigation.js
+                import { Link } from "react-router-dom";
 
+                function MainNavigation() {
+                    return (
+                        <header>
+                            <div>React Meetups</div>
+                            <nav>
+                                <ul>
+                                # lets link the links to the internal route links
+                                    <li><Link to="/">All Events</Link></li> 
+                                    <li><Link to="/new-meetup">New Meetup</Link></li>
+                                    <li><Link to="/favourites">Favourites Page</Link></li>
+                                </ul>
+                            </nav>
+                        </header>
+                    )
+                }
+                
+                export default MainNavigation;
 
 
 Video 471: Styling CSS Module
+        The feature where we can bind a component with its respective css is called as css modules
+            Example
+                Define a new file 
+                
+                    MainNavigation.module.css
+                        .header { color: red }
+                    MainNavigation.js
+                        import { Link } from "react-router-dom";
+
+                        import cssVariableName from './MainNavigation.module.css';
+                        //importing the css file like this
+                        function MainNavigation() {
+                            return (
+                                # using it like a property variable
+                                <header className={cssVariableName.header}>
+                                    <div className={cssVariableName.logo}>React Meetups</div>
+                                </header>
+                            )
+                        }
+
+Video 472: Outputting Lists of Data
+        if you want to render a list of elements you can do it like 
+                    {[ <li>Item1</li>, <li>Item2</li> ]}
+        
+        inside the AllMeetup.js lets populate dummy data for now
+            const DUMMY_DATA = [
+                {
+                id: 'm1',
+                title: 'This is a first meetup',
+                image: '',
+                address: 'Meetupstreet 5, 12345 Meetup City',
+                description: '',
+                },
+                {
+                id: 'm2',
+                title: 'This is a second meetup',
+                image: '',
+                address: 'Meetupstreet 5, 12345 Meetup City',
+                description: '',
+                },
+            ];
+            
+            function AllMeetup() {
+                return (
+                    <section>
+                        <h1>All Meetups</h1>
+                        {DUMMY_DATA.map((eachMeetup) => {
+                            return <li key={eachMeetup.id}>{eachMeetup.title}</li>;
+                            // remember adding key is mandatory and key within each <li> must be unique
+                        })}
+                    </section>
+                );
+            }
+
+Video 473: Adding More React Components
+
+
+Video 474: Building Wrapper Components with props.children
+
+
+Video 475: Adding a Formatter
+
+
+Video 476: Getting User Input & Handling Form Submission
+
+
+Video 477: Preparing the App for http
+
+
+
 
